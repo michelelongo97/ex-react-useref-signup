@@ -1,15 +1,15 @@
-import { use, useMemo, useState } from "react";
+import { use, useMemo, useState, useRef } from "react";
 
 const letters = "abcdefghijklmnopqrstuvwxyz";
 const numbers = "0123456789";
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\\,.<>?/`~";
 
 function App() {
-  const [fullname, setFullname] = useState("");
+  const fullnameRef = useRef();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [specialization, setSpecialization] = useState("");
-  const [years, setYears] = useState("");
+  const specializationRef = useRef();
+  const yearsRef = useRef();
   const [description, setDescription] = useState("");
 
   const isUsernameValid = useMemo(() => {
@@ -38,6 +38,11 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const fullname = fullnameRef.current.value;
+    const specialization = specializationRef.current.value;
+    const years = yearsRef.current.value;
+
     if (
       !fullname.trim() ||
       !username.trim ||
@@ -69,12 +74,7 @@ function App() {
         <h1>Web Developer Signup</h1>
       </div>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={fullname}
-          onChange={(e) => setFullname(e.target.value)}
-          placeholder="Nome completo"
-        />
+        <input type="text" ref={fullnameRef} placeholder="Nome completo" />
         <input
           type="text"
           value={username}
@@ -101,21 +101,14 @@ function App() {
               : "Deve contenere almeno 8 caratteri, 1 lettera, 1 numero ed 1 simbolo"}
           </p>
         )}
-        <select
-          value={specialization}
-          onChange={(e) => setSpecialization(e.target.value)}
-        >
+        <select ref={specializationRef}>
           {" "}
+          <option value="">Seleziona Specializzazione</option>
           <option value="fullstack">Full Stack</option>
           <option value="frontend">Frontend</option>
           <option value="backend">Backend</option>
         </select>
-        <input
-          type="number"
-          value={years}
-          onChange={(e) => setYears(e.target.value)}
-          placeholder="Anni di esperienza"
-        />
+        <input type="number" ref={yearsRef} placeholder="Anni di esperienza" />
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
